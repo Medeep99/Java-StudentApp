@@ -25,6 +25,7 @@
             id="name"
             value="#{studentBean.student.name}"
             required="true"
+            requiredMessage="Name is required"
           />
 
           <h:outputLabel for="address" value="Address:" />
@@ -33,6 +34,8 @@
             value="#{studentBean.student.address}"
             rows="2"
             autoResize="true"
+            required="true"
+            requiredMessage="Address is required"
           />
 
           <h:outputLabel for="studentClass" value="Class:" />
@@ -40,6 +43,7 @@
             id="studentClass"
             value="#{studentBean.student.studentClass}"
             required="true"
+            requiredMessage="Select a class"
           >
             <f:selectItem itemLabel="-- Select Class --" itemValue="" />
             <f:selectItems value="#{studentBean.studentClasses}" />
@@ -65,14 +69,16 @@
        
         </h:panelGrid>
 
-        <p:commandButton
-          value="Save"
-          action="#{studentBean.saveStudent}"
-          update="studentForm:messages studentForm:studentTable"
-          icon="pi pi-save"
-          styleClass="p-button p-button-primary"
-          style="margin-top: 10px"
-        />
+       <p:commandButton
+  value="Save"
+  action="#{studentBean.saveStudent}"
+  update="studentForm:messages studentForm:studentTable studentForm"
+  process="@form"
+  icon="pi pi-save"
+  styleClass="p-button p-button-primary"
+  style="margin-top: 10px"
+  resetInput="true"
+/>
       </p:panel>
 
       <p:panel header="Student List">
