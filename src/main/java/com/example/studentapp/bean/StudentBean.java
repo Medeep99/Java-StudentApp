@@ -75,18 +75,10 @@ public class StudentBean implements Serializable {
             .update("studentForm:messages", "studentForm:studentTable");
     }
 
-    // public void openEditDialog(Student s) {
-    //     selectedStudent = s;
-    //     availableSubjects = subjectsByClass.getOrDefault(
-    //         s.getStudentClass(),
-    //         Collections.emptyList()
-    //     );
-    //     PrimeFaces.current().ajax().update("editForm");
-    //     PrimeFaces.current().executeScript("PF('editDlg').show()");
-    // }
+
     public void openEditDialog(Student s) {
         selectedStudent = s;
-        // **CRITICAL FIX:** Re-initialize the available subjects for the edit form
+        
         availableSubjects = subjectsByClass.getOrDefault(
             selectedStudent.getStudentClass(),
             Collections.emptyList()
@@ -111,7 +103,7 @@ public class StudentBean implements Serializable {
     );
     selectedStudent.setSubjects(new ArrayList<>());
 }
-    // ========== Getters & Setters ==========
+
     public Student getStudent() { return student; }
     public void setStudent(Student student) { this.student = student; }
 

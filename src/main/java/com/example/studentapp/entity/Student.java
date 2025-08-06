@@ -22,9 +22,9 @@ public class Student implements Serializable {
     private Long id;
     private String name;
     private String address;
-    private String studentClass; // e.g., "Class A", "Class B"
+    private String studentClass; 
 
-    @ElementCollection// For collections of basic types
+    @ElementCollection
     @CollectionTable(name = "student_subjects", joinColumns = @JoinColumn(name = "student_id"))
     @Column(name = "subject")
     private List<String> subjects = new ArrayList<>();
