@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="
+               http://xmlns.jcp.org/xml/ns/persistence 
+               http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+  <persistence-unit name="StudentPU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/schooldb</jta-data-source>
+    <non-jta-data-source>jdbc/schooldb</non-jta-data-source>
+
+    <class>com.example.studentapp.entity.Student</class>
+
+    <properties>
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+      <property name="eclipselink.weaving" value="false"/>
+      <property name="eclipselink.deploy-on-startup" value="false"/>
+    </properties>
+  </persistence-unit>
+</persistence>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+>
+  <h:head>
+    <title>Student Management</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <h:outputStylesheet library="primefaces-nova-light" name="theme.css" />
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <h:outputStylesheet name="primefaces.css" library="primefaces" />
+  </h:head>
+  <h:body>
+    <h:form id="studentForm">
+      <p:growl id="messages" showDetail="true" life="3000" />
+
+      <p:panel header="Add New Student" style="margin-bottom: 20px">
+        <h:panelGrid columns="2" cellpadding="5">
+          <h:outputLabel for="name" value="Name:" />
+          <p:inputText
+            id="name"
+            value="#{studentBean.student.name}"
+            required="true"
+          />
+
+          <h:outputLabel for="address" value="Address:" />
+          <p:inputTextarea
+            id="address"
+            value="#{studentBean.student.address}"
+            rows="2"
+            autoResize="true"
+          />
+
+          <h:outputLabel for="studentClass" value="Class:" />
+          <p:selectOneMenu
+            id="studentClass"
+            value="#{studentBean.student.studentClass}"
+            required="true"
+          >
+            <f:selectItem itemLabel="-- Select Class --" itemValue="" />
+            <f:selectItems value="#{studentBean.studentClasses}" />
+            <p:ajax
+              event="change"
+              listener="#{studentBean.onClassChange}"
+              update="subjects"
+              process="@this"
+            />
+          </p:selectOneMenu>
+
+     
+            <h:outputLabel for="subjects" value="Subjects:" />
+            <p:selectCheckboxMenu
+              id="subjects"
+              value="#{studentBean.student.subjects}"
+              label="Select Subjects"
+              style="width: 100%"
+              filter="true"
+            >
+              <f:selectItems value="#{studentBean.availableSubjects}" />
+            </p:selectCheckboxMenu>
+       
+        </h:panelGrid>
+
+        <p:commandButton
+          value="Save"
+          action="#{studentBean.saveStudent}"
+          update="studentForm:messages studentForm:studentTable"
+          icon="pi pi-save"
+          styleClass="p-button p-button-primary"
+          style="margin-top: 10px"
+        />
+      </p:panel>
+
+      <p:panel header="Student List">
+        <p:dataTable
+          id="studentTable"
+          value="#{studentBean.students}"
+          var="s"
+          responsiveLayout="scroll"
+          rowKey="#{s.id}"
+          style="width: 100%"
+        >
+          <p:column headerText="Name">
+            <h:outputText value="#{s.name}" />
+          </p:column>
+          <p:column headerText="Address">
+            <h:outputText value="#{s.address}" />
+          </p:column>
+          <p:column headerText="Class">
+            <h:outputText value="#{s.studentClass}" />
+          </p:column>
+          <p:column headerText="Subjects">
+            <ui:repeat value="#{s.subjects}" var="subj" varStatus="status">
+              <h:outputText value="#{subj}" />
+              <h:outputText value=", " rendered="#{!status.last}" />
+            </ui:repeat>
+          </p:column>
+          <p:column headerText="Actions" style="text-align: center">
+            <p:commandButton
+              title="Edit"
+              icon="pi pi-pencil"
+              actionListener="#{studentBean.openEditDialog(s)}"
+              update=":editForm"
+              process="@this"
+              style="background-color: orange; margin: 10px"
+            />
+
+            <p:commandButton
+              icon="pi pi-trash"
+              title="Delete"
+              actionListener="#{studentBean.deleteStudent(s)}"
+              update="studentForm:messages studentForm:studentTable"
+              process="@this"
+              style="background-color: brown; margin: 10px"
+            />
+          </p:column>
+        </p:dataTable>
+      </p:panel>
+    </h:form>
+
+    <p:dialog
+      header="Edit Student"
+      widgetVar="editDlg"
+      modal="true"
+      id="editDialog"
+      resizable="false"
+      closable="true"
+      appendTo="@(body)"
+      style="z-index: 10000; width: 40vw"
+    >
+      <h:form id="editForm">
+        <h:panelGrid columns="2" cellpadding="5">
+          <h:outputLabel for="editName" value="Name:" />
+          <p:inputText
+            id="editName"
+            value="#{studentBean.selectedStudent.name}"
+            required="true"
+          />
+
+          <h:outputLabel for="editAddress" value="Address:" />
+          <p:inputTextarea
+            id="editAddress"
+            value="#{studentBean.selectedStudent.address}"
+            rows="2"
+            autoResize="true"
+          />
+
+          <h:outputLabel for="editClass" value="Class:" />
+          <p:selectOneMenu
+            id="editClass"
+            value="#{studentBean.selectedStudent.studentClass}"
+          >
+            <f:selectItems
+              value="#{studentBean.studentClasses}"
+              var="cls"
+              itemValue="#{cls}"
+              itemLabel="#{cls}"
+            />
+            <p:ajax
+              listener="#{studentBean.onEditClassChange}"
+              update="editSubjects"
+            />
+          </p:selectOneMenu>
+
+          <h:outputLabel for="editSubjects" value="Subjects:" />
+          <p:selectCheckboxMenu
+            id="editSubjects"
+            value="#{studentBean.selectedStudent.subjects}"
+            label="Select Subjects"
+          >
+            <f:selectItems
+              value="#{studentBean.availableSubjects}"
+              var="subj"
+              itemValue="#{subj}"
+              itemLabel="#{subj}"
+            />
+          </p:selectCheckboxMenu>
+        </h:panelGrid>
+
+        <p:commandButton
+          value="Update"
+          icon="pi pi-check"
+          actionListener="#{studentBean.updateStudent}"
+          update=":studentForm:messages :studentForm:studentTable"
+          oncomplete="PF('editDlg').hide()"
+          styleClass="p-button p-button-success"
+        />
+      </h:form>
+    </p:dialog>
+  </h:body>
+</html>

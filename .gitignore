@@ -1,0 +1,15 @@
+# Maven
+target/
+*.log
+
+# IntelliJ / Eclipse / NetBeans
+*.iml
+.idea/
+*.ipr
+*.iws
+nbproject/private/
+*.class
+
+# OS files
+.DS_Store
+Thumbs.db
